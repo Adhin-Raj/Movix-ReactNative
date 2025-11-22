@@ -1,8 +1,36 @@
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BannerImg from "@/assets/images/banner.png";
+import { API_KEY } from "@/constants";
 
 export default function Carousel() {
+
+   const [popular,setPopular] = useState()
+   const [activeIndex,setActiveIndex] = useState(0)
+
+  async function fetchApi() {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=1`)
+      const {results} = await response.json()
+      setPopular(results.slice(0,5))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+
+  useEffect(()=>{
+    fetchApi()
+
+  const interval=   setInterval(() => {
+      setActiveIndex(prev=>(prev + 1) % popular.length)
+    }, 1000);
+
+    return ()=>clearInterval(interval)
+  },[])
+
+console.log(activeIndex)
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Now Showing</Text>
@@ -10,10 +38,10 @@ export default function Carousel() {
       <View style={styles.overlayContainer}>
         <FlatList
           contentContainerStyle={styles.pointsContainer}
-          data={Array.from({ length: 5 })}
-          renderItem={(_) => <View style={styles.activePoint}></View>}
+          data={popular}
+          renderItem={({item}) => <View style={styles.activePoint}></View>}
         />
-        <Text style={styles.movieTitle}>The Last Kingdom</Text>
+        <Text style={styles.movieTitle}>The Kingdom</Text>
       </View>
     </View>
   );

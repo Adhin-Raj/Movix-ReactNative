@@ -1,6 +1,6 @@
 import CustomButton from "@/components/atom/CustomButton";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function OnBoardingScreen() {
@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
   },
   description: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: 13,
+    fontFamily:'GeneralSans'
   },
   ctaBtn: {
     backgroundColor: "#B090F4",
