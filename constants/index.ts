@@ -11,3 +11,25 @@ export const sci_fiUrl = `https://api.themoviedb.org/3/discover/movie?with_genre
 export const horrorUrl = `https://api.themoviedb.org/3/discover/movie?with_genres=27&api_key=${API_KEY}`;
 export const romanceUrl = `https://api.themoviedb.org/3/discover/movie?with_genres=10749&api_key=${API_KEY}`;
 export const fantasyUrl = `https://api.themoviedb.org/3/discover/movie?with_genres=14&api_key=${API_KEY}`;
+
+export const genres:{[key:string]:string} = {
+  28: "Action",
+  12: "Adventure",
+  16: "Animation",
+  35: "Comedy",
+  80: "Crime",
+  99: "Documentary",
+  18: "Drama",
+  10751: "Family",
+  14: "Fantasy",    
+  36: "History",
+  27: "Horror",
+  10402: "Music",
+  9648: "Mystery",
+  10749: "Romance",
+  878: "Science Fiction",
+  10770: "TV Movie",
+  53: "Thriller",
+  10752: "War",
+  37: "Western",
+};

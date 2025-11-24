@@ -1,49 +1,80 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { API_KEY, imageUrl } from "@/constants";
 import React, { useEffect, useState } from "react";
-import BannerImg from "@/assets/images/banner.png";
-import { API_KEY } from "@/constants";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { MovieType } from "../Card";
 
 export default function Carousel() {
-
-   const [popular,setPopular] = useState()
-   const [activeIndex,setActiveIndex] = useState(0)
+  const [popular, setPopular] = useState<MovieType[] | []>([]);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   async function fetchApi() {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=1`)
-      const {results} = await response.json()
-      setPopular(results.slice(0,5))
+      setIsLoaded(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=1`
+      );
+      const { results } = await response.json();
+      setPopular(results.slice(4, 9));
     } catch (error) {
-      console.log(error)
+      console.log(error);
+    } finally {
+      setIsLoaded(false);
     }
   }
-  
 
-  useEffect(()=>{
-    fetchApi()
+  useEffect(() => {
+    fetchApi();
 
-  const interval=   setInterval(() => {
-      setActiveIndex(prev=>(prev + 1) % popular.length)
-    }, 1000);
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % 5);
+    }, 5000);
 
-    return ()=>clearInterval(interval)
-  },[])
-
-console.log(activeIndex)
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Now Showing</Text>
-      <Image source={BannerImg} style={styles.bannerImg} width={320} />
-      <View style={styles.overlayContainer}>
-        <FlatList
-          contentContainerStyle={styles.pointsContainer}
-          data={popular}
-          renderItem={({item}) => <View style={styles.activePoint}></View>}
-        />
-        <Text style={styles.movieTitle}>The Kingdom</Text>
-      </View>
-    </View>
+    <>
+      {!isLoaded ? (
+        <View style={styles.container}>
+          <Text style={styles.title}>Now Showing</Text>
+          <Image
+            source={{ uri: imageUrl + popular[activeIndex]?.poster_path }}
+            style={styles.bannerImg}
+            height={400}
+          />
+
+          <View style={styles.overlayContainer}>
+            <FlatList
+              contentContainerStyle={styles.pointsContainer}
+              data={popular}
+              scrollEnabled={false}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ index }) => (
+                <View
+                  style={[
+                    styles.activePoint,
+                    activeIndex === index
+                      ? { backgroundColor: "#F5F5F5" }
+                      : { backgroundColor: "gray" },
+                  ]}
+                ></View>
+              )}
+            />
+            <Text style={styles.movieTitle}>{popular[activeIndex]?.title}</Text>
+          </View>
+        </View>
+      ) : (
+        <ActivityIndicator size={24} />
+      )}
+    </>
   );
 }
 
@@ -59,29 +90,29 @@ const styles = StyleSheet.create({
   },
   bannerImg: {
     width: "100%",
-    resizeMode: "contain",
+    resizeMode: "stretch",
     marginTop: 20,
+    borderRadius: 20,
   },
   overlayContainer: {
     position: "absolute",
-    bottom:0,
-    alignItems:'center',
-    flexDirection:'row',
-    paddingInline:20,
-    marginBottom:20
+    bottom: 0,
+    alignItems: "center",
+    flexDirection: "row",
+    paddingInline: 20,
+    marginBottom: 16,
   },
   movieTitle: {
     fontFamily: "GeneralSans",
     color: "#F5F5F5",
   },
-  pointsContainer:{
-    flexDirection:'row',
-    gap:5
+  pointsContainer: {
+    flexDirection: "row",
+    gap: 5,
   },
-  activePoint:{
-    backgroundColor:'#F5F5F5',
-    height:8,
-    width:8,
-    borderRadius:100,
-  }
+  activePoint: {
+    height: 8,
+    width: 8,
+    borderRadius: 100,
+  },
 });

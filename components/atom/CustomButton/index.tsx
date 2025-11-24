@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface CustomButtonProps {
-  handlePress: () => void;
+  handlePress?: () => void;
   btnLabel: string;
   customBtnStyle?: Object;
   customTextStyle?: Object;

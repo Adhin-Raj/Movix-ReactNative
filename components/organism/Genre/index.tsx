@@ -22,7 +22,7 @@ export default function Genre({ url, genre }: GenreProps) {
 
   useEffect(() => {
     fetchApi();
-  }, [movieData]);
+  }, []);
 
   return (
     <ScrollView style={styles.container}>

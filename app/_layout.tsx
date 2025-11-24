@@ -1,5 +1,10 @@
+import { MovieProvider } from "@/context/MovieContextProvider";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
-  return <Stack  screenOptions={{headerShown:false}}/>;
+  return(
+    <MovieProvider>
+      <Stack  screenOptions={{headerShown:false}}/>
+    </MovieProvider>
+  );
 }
