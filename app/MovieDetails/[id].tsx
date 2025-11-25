@@ -18,7 +18,6 @@ import { MovieContext } from "@/context/MovieContext";
 
 export default function MovieDetails() {
   const { data } = useContext(MovieContext);
-  console.log("id", data);
   const router = useRouter();
   return (
     <ScrollView style={styles.container}>
@@ -94,8 +93,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     maxWidth: 250,
   },
-  genreList:{
-   gap:16
+  genreList: {
+    gap: 16,
   },
   genreBtn: {
     alignSelf: "flex-start",
@@ -103,7 +102,6 @@ const styles = StyleSheet.create({
     paddingBlock: 8,
     paddingInline: 20,
     marginTop: 8,
-    
   },
   buttonLabel: {
     color: "#B090F4",

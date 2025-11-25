@@ -1,6 +1,13 @@
 import HeartIcon from "@/assets/images/heart-icon.png";
 import React, { useContext } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import IconButton from "../../atom/IconButton";
 import { imageUrl } from "@/constants";
 import Star from "@/assets/images/star.png";
@@ -20,7 +27,7 @@ export interface MovieType {
   popularity: number;
   video: boolean;
   vote_count: number;
-  genre_ids:number[]
+  genre_ids: number[];
 }
 
 export default function Card(movie: MovieType) {
@@ -34,29 +41,41 @@ export default function Card(movie: MovieType) {
   };
 
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={handleNavigate}>
-      <Image
-        style={styles.moviePoster}
-        source={{ uri: `${imageUrl}${movie.poster_path}` }}
-      />
-      <View style={styles.content}>
-        <Text numberOfLines={2} ellipsizeMode="tail" style={styles.movieTitle}>
-          {movie.title}
-        </Text>
-        <View style={styles.textContainer}>
-          <Text style={styles.cardText}>{movie.release_date.slice(0, 4)}</Text>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Text style={styles.cardText}>
-              {movie.vote_average.toFixed(1)}{" "}
+    <>
+      {!movie ? (
+        <ActivityIndicator size={30} />
+      ) : (
+        <TouchableOpacity style={styles.cardContainer} onPress={handleNavigate}>
+          <Image
+            style={styles.moviePoster}
+            source={{ uri: `${imageUrl}${movie.poster_path}` }}
+          />
+          <View style={styles.content}>
+            <Text
+              numberOfLines={2}
+              ellipsizeMode="tail"
+              style={styles.movieTitle}
+            >
+              {movie.title}
             </Text>
-            <Image style={styles.starIcon} source={Star} />
+            <View style={styles.textContainer}>
+              <Text style={styles.cardText}>
+                {movie.release_date.slice(0, 4)}
+              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={styles.cardText}>
+                  {movie.vote_average.toFixed(1)}{" "}
+                </Text>
+                <Image style={styles.starIcon} source={Star} />
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-      <IconButton customStyle={styles.iconButton}>
-        <Image source={HeartIcon} width={24} height={24} />
-      </IconButton>
-    </TouchableOpacity>
+          <IconButton customStyle={styles.iconButton}>
+            <Image source={HeartIcon} width={24} height={24} />
+          </IconButton>
+        </TouchableOpacity>
+      )}
+    </>
   );
 }
 
